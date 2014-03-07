@@ -1,5 +1,5 @@
 Init (C|c)reate_(U|u)niverse 
-FUNTION Def 
+FUNCTION wormhole 
 INT int 
 FLOAT float 
 STRING string 
@@ -36,7 +36,14 @@ OPERATOR \+
 OPERATOR - 
 OPERATOR \* 
 OPERATOR / 
+OPENPAR \( 
+CLOSEPAR \) 
+OPENCORCH \{ 
+CLOSECORCH \} 
+ENDEXPRESION \\n 
 ASSIGN = 
-NUM [0-9]+ 
 ID [a-zA-Z]+[a-zA-Z0-9]* 
+STRINGVALUE \"[a-zA-Z0-9]*\" 
+FLOATVALUE [0-9]+\.[0-9]+ 
+NUMVALUE [0-9]+ 
 EXTRA .*

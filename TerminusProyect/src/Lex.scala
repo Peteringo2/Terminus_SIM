@@ -6,6 +6,7 @@ object Lex{
 	def analyze(F_SourceCode: String): List[List[String]] ={
 	  
 	  var TokenList: List[List[String]] = List()
+	  val EndLine: List[List[String]] = List(List("ENTER"," "))
 	  
 	  var RegexList = scala.io.Source.fromFile("regex list.txt")
 	  var Regexs = RegexList.mkString
@@ -16,6 +17,7 @@ object Lex{
 	  for(x<-SourceCodeLine){
 		  SourceCode = format(x)
 		  TokenList = TokenList ::: getTokens(SourceCode,"regex list.txt")
+		  TokenList = TokenList ::: EndLine
 		}
 	  return TokenList
       
@@ -53,27 +55,32 @@ object Lex{
 	
 	def format(SCode:String):String={
 	  var SourceCode = SCode
-	  SourceCode = SourceCode.replace(",", ", ")
-	  SourceCode = SourceCode.replace("=", "= ")
-	  SourceCode = SourceCode.replace("+", "+ ")
-	  SourceCode = SourceCode.replace("-", "- ")
-	  SourceCode = SourceCode.replace("*", "* ")
-	  SourceCode = SourceCode.replace("/", "/ ")
-	  SourceCode = SourceCode.replace("%", "% ")
-	  SourceCode = SourceCode.replace("* *", "*")
-	  SourceCode = SourceCode.replace("+ +", "+")
-	  SourceCode = SourceCode.replace("- -", "-")
-	  SourceCode = SourceCode.replace("+ =", "+=")
-	  SourceCode = SourceCode.replace("- =", "-=")
-	  SourceCode = SourceCode.replace("* =", "*=")
-	  SourceCode = SourceCode.replace("/ =", "/=")
+	  SourceCode = SourceCode.replace(",", " , ")
+	  SourceCode = SourceCode.replace(")", " ) ")
+	  SourceCode = SourceCode.replace("(", " ( ")
+	  SourceCode = SourceCode.replace("}", " } ")
+	  SourceCode = SourceCode.replace("{", " { ")
+	  SourceCode = SourceCode.replace(";", " ; ")
+	  SourceCode = SourceCode.replace("=", " = ")
+	  SourceCode = SourceCode.replace("+", " + ")
+	  SourceCode = SourceCode.replace("-", " - ")
+	  SourceCode = SourceCode.replace("*", " * ")
+	  SourceCode = SourceCode.replace("/", " / ")
+	  SourceCode = SourceCode.replace("%", " % ")
+	  SourceCode = SourceCode.replace("*  *", "*")
+	  SourceCode = SourceCode.replace("+  +", "+")
+	  SourceCode = SourceCode.replace("-  -", "-")
+	  SourceCode = SourceCode.replace("+  =", "+=")
+	  SourceCode = SourceCode.replace("-  =", "-=")
+	  SourceCode = SourceCode.replace("*  =", "*=")
+	  SourceCode = SourceCode.replace("/  =", "/=")
 	  
-	  SourceCode = SourceCode.replace("= =", "==")
-	  SourceCode = SourceCode.replace("! =", "!=")
-	  SourceCode = SourceCode.replace("<", "< ")
-	  SourceCode = SourceCode.replace(">", "> ")
-	  SourceCode = SourceCode.replace("< =", "<=")
-	  SourceCode = SourceCode.replace("> =", ">=")
+	  SourceCode = SourceCode.replace("=  =", "==")
+	  SourceCode = SourceCode.replace("!  =", "!=")
+	  SourceCode = SourceCode.replace("<", " < ")
+	  SourceCode = SourceCode.replace(">", " > ")
+	  SourceCode = SourceCode.replace("<  =", "<=")
+	  SourceCode = SourceCode.replace(">  =", ">=")
 
 	  return SourceCode
 	} 
