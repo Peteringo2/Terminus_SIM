@@ -42,8 +42,9 @@ object Lex{
 
 		
 			  if (!find.isEmpty()){
-			    val tuple: List[String] = List(token(0),find)
-				tokens = tokens ::: List(tuple)
+			    var tuple: List[String] = List(token(0),find)
+				tuple = SymbolTableGenerator.generate(tuple) 
+			    tokens = tokens ::: List(tuple)
 				loop.break
 			  }    
 		  }

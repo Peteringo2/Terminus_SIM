@@ -1,4 +1,4 @@
-Init (C|c)reate_(U|u)niverse 
+INIT (C|c)reate_(U|u)niverse 
 FUNCTION wormhole 
 INT int 
 FLOAT float 
