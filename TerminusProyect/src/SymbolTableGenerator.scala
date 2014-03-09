@@ -2,19 +2,20 @@ object SymbolTableGenerator {
   
 	var SymbolTable:Map[Int,String] = Map()
 	var CurrentKey = 0
-	def generate(Tuple:List[String]):List[String] ={
+	var CurrentFuntion = "univ"
+	  
+	def generate(Tuple:List[String],isDef:Boolean):List[String] ={
 		var newTuple = Tuple
 		val Class = Tuple(0)
 		var Value = Tuple(1)
 		var storekey = 0
-		var CurrentFuntion = "univ"
-		if(Class == "FUNCTION" ){
+		
+		if(isDef == true)
 		  CurrentFuntion = Value
-		}else if( Class == "INIT"){
+		if(Class.equals("INIT"))
 		  CurrentFuntion = "univ"
-		}
 	
-		if(Class=="ID"|Class=="OPERATOR"|Class=="COMPARATOR"|Class=="STRINGVALUE"|Class=="FLOATVALUE"|Class=="NUMVALUE"){
+		if(Class=="ID"||Class=="OPERATOR"||Class=="COMPARATOR"||Class=="STRINGVALUE"||Class=="FLOATVALUE"||Class=="NUMVALUE"){
 		  //Si hay que meterlo a la tabla
 		  Value = CurrentFuntion+"."+Value
 		  storekey = exist(Value)

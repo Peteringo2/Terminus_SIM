@@ -9,6 +9,5 @@ object Lecture {
 		tokens = tokens ::: (Lex.analyze("file.txt"))
 		println(tokens)
 		println(SymbolTableGenerator.SymbolTable)
-		
   }
 }

@@ -29,7 +29,7 @@ object Lex{
       var Regexs = Regex
       var tokens: List[List[String]] = List()
       var words: Array[String] = Line.split(" ")
-   
+      var isDef = false
       for(i <- words){ 
 		  var Rgx = ""
 		  loop.breakable{
@@ -43,8 +43,10 @@ object Lex{
 		
 			  if (!find.isEmpty()){
 			    var tuple: List[String] = List(token(0),find)
-				tuple = SymbolTableGenerator.generate(tuple) 
+				tuple = SymbolTableGenerator.generate(tuple,isDef)
+				isDef = false
 			    tokens = tokens ::: List(tuple)
+			    if (token(0).equals("FUNCTION")||token(0).equals("FUNCTION")) isDef=true
 				loop.break
 			  }    
 		  }
