@@ -2,11 +2,10 @@ import scala.io.Source._
 object Lecture {
 
   def main(args: Array[String]): Unit = {
-		  
+		Grammar.generateGrammar("Grammar.txt")
+		println(Grammar.Grammar)
 		
-		var tokens: List[List[String]] = List()
-		var SymbolTable:Map[Int,String] = Map()
-		tokens = tokens ::: (Lex.analyze("file.txt"))
+		val tokens: List[List[String]] = (Lex.analyze("file.txt"))
 		println(tokens)
 		println(SymbolTableGenerator.SymbolTable)
   }

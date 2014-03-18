@@ -25,11 +25,13 @@ object Lex{
 	
 	def getTokens(str : String, RegexFile: String):List[List[String]]={
 	  val loop = new Breaks
+	  val comentloop = new Breaks
 	  var Line = str
       var Regexs = Regex
       var tokens: List[List[String]] = List()
       var words: Array[String] = Line.split(" ")
       var isDef = false
+      comentloop.breakable{
       for(i <- words){ 
 		  var Rgx = ""
 		  loop.breakable{
@@ -42,6 +44,8 @@ object Lex{
 
 		
 			  if (!find.isEmpty()){
+			    if(find.equals("#")) comentloop.break;
+			    if(!find.equals(i)) println("Lexical error on: " + i)
 			    var tuple: List[String] = List(token(0),find)
 				tuple = SymbolTableGenerator.generate(tuple,isDef)
 				isDef = false
@@ -52,6 +56,7 @@ object Lex{
 		  }
 		  }
       }
+	  }
 	  return tokens
 	}
 	

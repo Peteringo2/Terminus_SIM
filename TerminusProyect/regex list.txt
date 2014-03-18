@@ -1,3 +1,4 @@
+COMENT # 
 INIT (C|c)reate_(U|u)niverse 
 FUNCTION wormhole 
 INT int 
