@@ -1,2 +1,2 @@
-wormhole planetn 3421..231 3423hola = #new Create_Universe x
-x = planetn aseas wormhole a x
+wormhole planetn 3421..231 = #new Create_Universe x
+x = planetn aseas wormhole 3423hola a x
