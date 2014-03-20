@@ -13,17 +13,19 @@ object Lex{
 	  
 	  val SourceCodeLine = fromFile(F_SourceCode).getLines
 	  var SourceCode = ""
+	  var LineNum = 0
 	      
-	  for(x<-SourceCodeLine){
+	  for(x<- SourceCodeLine){
 		  SourceCode = format(x)
-		  TokenList = TokenList ::: getTokens(SourceCode,"regex list.txt")
+		  TokenList = TokenList ::: getTokens(SourceCode,"regex list.txt",LineNum)
 		  TokenList = TokenList ::: EndLine
+		  LineNum = LineNum + 1
 		}
 	  return TokenList
       
     }
 	
-	def getTokens(str : String, RegexFile: String):List[List[String]]={
+	def getTokens(str : String, RegexFile: String, LineNum: Int):List[List[String]]={
 	  val loop = new Breaks
 	  val comentloop = new Breaks
 	  var Line = str
@@ -45,7 +47,7 @@ object Lex{
 		
 			  if (!find.isEmpty()){
 			    if(find.equals("#")) comentloop.break;
-			    if(!find.equals(i)) println("Lexical error on: " + i)
+			    if(!find.equals(i)) ErrorLog.writeLog(1, i,LineNum)
 			    var tuple: List[String] = List(token(0),find)
 				tuple = SymbolTableGenerator.generate(tuple,isDef)
 				isDef = false
@@ -59,7 +61,6 @@ object Lex{
 	  }
 	  return tokens
 	}
-	
 	
 	def format(SCode:String):String={
 	  var SourceCode = SCode

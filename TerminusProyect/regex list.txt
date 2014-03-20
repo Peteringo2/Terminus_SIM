@@ -6,6 +6,8 @@ KEYWORD int
 KEYWORD float 
 KEYWORD string 
 KEYWORD Planet 
+TRUE true 
+FALSE false 
 NEW new 
 IF if 
 ELSE else 

@@ -49,7 +49,7 @@ object Grammar {
                  Terminal = Terminal ::: List(find.replaceAll("@", ""))
                 
               }else{
-            	  Terminal = Terminal ::: List(x.charAt(0)+"")
+            	  Terminal = List(x.charAt(0)+"")
               }
        }     
 	  return Terminal
