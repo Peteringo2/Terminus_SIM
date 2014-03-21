@@ -8,8 +8,8 @@ class BottomUp{
 				for(cadena <- Grammar.Grammar(charToClosure))
 					yield {
 					cadena charAt 0 match{
-					case ('@') => (charToClosure, (Grammar.token.findFirstIn(cadena).mkString("").substring(1, -1), 0))
-					case ('<') => (charToClosure, (s = Grammar.token.findFirstIn(cadena).mkString("").substring(1, -1), 0))
+					case ('@') => (charToClosure, Grammar.token.findFirstIn(cadena).mkString("").substring(1, -1))
+					case ('<') => (charToClosure, s = Grammar.token.findFirstIn(cadena).mkString("").substring(1, -1))
 					case _ => (1,1)
 					}
 				}
@@ -24,18 +24,10 @@ class BottomUp{
 	  
 	}
 	
-	def nodeClosureCreater{
-	  
-	  val n = new Nodo(0, ("S", List("aba","dra")))
-	  
-	  n.addListToMap(Getclosure("S"))
-	  
-	  
-	  
+	def nodeClosureCreater(prod : String, name : Int){
+	  val n = new Nodo(name)
+	  n.addListToMap(Getclosure(prod))
 	}
 	
-	def firstNodeInitializer{
-	  
-	}
 	
 }

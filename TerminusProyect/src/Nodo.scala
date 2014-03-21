@@ -1,12 +1,10 @@
 import scala.collection.mutable.Map
 
-class Nodo(val name : Int, firstProduction: (_,_)){
+class Nodo(val name : Int){
   
   val mapa =  Map[Any,Any]()
   var pointers = List[Int]()
-  
-  addToMap(firstProduction)
-  
+    
   def addToPointers(x: Int){
     pointers ::= x
   }
