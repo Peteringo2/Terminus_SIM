@@ -1,8 +1,9 @@
 import scala.io.Source._
 object Lecture {
 
-  def main(args: Array[String]): Unit = {
+  def main(args: Array[String]){
 		Grammar.generateGrammar("Grammar.txt")
+		
 		println("Gramatica:")
 		println(Grammar.Grammar + "\n\n")
 		println("los firsts son: ")
