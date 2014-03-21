@@ -1,7 +1,7 @@
 
 class BottomUp{  
 
-	def Getclosure(charToClosure :String): List[_] = {
+	def Getclosure(charToClosure :String): List[(Any,Any)] = {
 		
 	  var s = ""
 		val temp =
@@ -10,7 +10,7 @@ class BottomUp{
 					cadena charAt 0 match{
 					case ('@') => (charToClosure, (Grammar.token.findFirstIn(cadena).mkString("").substring(1, -1), 0))
 					case ('<') => (charToClosure, (s = Grammar.token.findFirstIn(cadena).mkString("").substring(1, -1), 0))
-					case _ => ()
+					case _ => (1,1)
 					}
 				}
 
@@ -21,13 +21,20 @@ class BottomUp{
 	  }
 	  
 	  listToMap
+	  
 	}
 	
-	def nodeCreater{
+	def nodeClosureCreater{
 	  
-	  val n = new Nodo(0)
+	  val n = new Nodo(0, ("S", List("aba","dra")))
+	  
+	  n.addListToMap(Getclosure("S"))
 	  
 	  
+	  
+	}
+	
+	def firstNodeInitializer{
 	  
 	}
 	
