@@ -60,11 +60,11 @@ object Grammar {
 	}
 	
 
-	def getFollows(GrammarSource:String):Map[String,Set[String]]={
+	def getFollows():Map[String,Set[String]]={
 	  	var follows:Map[String, Set[String]] = Map()//Mapa que contiene los sets follows
 	  	var changes : Boolean = true //variable para saber si hubo cambios en el ciclo
 	  	Grammar.keys.foreach(key => follows += (key -> Set() ) ) //iniciamos follow con todos los no terminales
-	  	follows += ("S" -> Set("$")) // inicia el follow de <S> con el símbolo de $
+	  	follows += ("<S>" -> Set("$")) // inicia el follow de <S> con el símbolo de $
 
 	  	while(changes){
 	  		changes = false
@@ -75,17 +75,22 @@ object Grammar {
 	  					var set = follows(a)
 	  					var new_set : Set[String] = Set()
 	  					if(index >= x.length)
-	  						new_set = set.union(follows(x))
+	  						new_set = set.union(follows(prod))
 	  					else if(x(index) == '@'){
 	  						//agregamos terminal
+	  					    new_set = Set((token findFirstIn x.substring(index)).mkString("").replaceAll("@", ""))
 	  					}
 	  					else if(x(index) == '<'){
 	  						val beta = (NonTerminal findFirstIn x.substring(index)).mkString("")
-   		 					new_set = set.union( Firsts(beta).toSet.filter(a =>  a != "!") )
+   		 					new_set = set.union(Firsts(beta).toSet.filter(a =>  a != "!") )
    		 					if(Firsts(beta).contains("!"))
-   		 						new_set = set.union(follows(x))
+   		 						new_set = new_set.union(follows(prod))
 	  					}
-	  					if(set != new_set){
+	  					
+	  					var flag = false;
+	  					new_set.foreach(x => if(!set.contains(x)) flag = true)
+	  					
+	  					if(flag){
     		 				var follow_a = follows(a)
     		 				follow_a = follow_a.union(new_set)
    		 					follows += (a -> follow_a)

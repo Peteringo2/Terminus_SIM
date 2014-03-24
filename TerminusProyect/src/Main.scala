@@ -8,13 +8,15 @@ object Lecture {
 		println("los firsts son: ")
 		Grammar.getFirsts
 		println(Grammar.Firsts + "\n\n")
-		TopDown.generateTable
-		println("La tabla top Down es: ")
-		println(TopDown.Table + "\n\n")
-		
-		Lex.tokens = (Lex.analyze("file.txt"))
-		println("tokens: \n" + Lex.tokens)
-		println("Symbol Table: \n" + SymbolTableGenerator.SymbolTable)
+		println("los follows:")
+		println(Grammar.getFollows + "\n\n")
+//		TopDown.generateTable
+//		println("La tabla top Down es: ")
+//		println(TopDown.Table + "\n\n")
+//		
+//		Lex.tokens = (Lex.analyze("file.txt"))
+//		println("tokens: \n" + Lex.tokens)
+//		println("Symbol Table: \n" + SymbolTableGenerator.SymbolTable)
 		
 		//println(TopDown.Table(Tuple2("<content>","DO")))
 		
