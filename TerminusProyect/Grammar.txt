@@ -5,7 +5,7 @@
 <wormhole>->@WORMHOLE@@KEYWORD@@ID@@OPENPAR@<Argument>@CLOSEPAR@@OPENKEY@<content><Teleport>@CLOSEKEY@
 <Argument>->@KEYWORD@@ID@<Arguments>
 <Argument>->!
-<Arguments>->@COMMA@<DataType>@ID@<Arguments>
+<Arguments>->@COMMA@@KEYWORD@@ID@<Arguments>
 <Arguments>->!
 <Teleport>->@TELEPORT@<expr>@END@
 <bool>-><expr>@COMP@<expr>
@@ -42,11 +42,11 @@
 <commaexprs>->!
 <commaexpr>->@COMMA@<expr><commaexpr>
 <commaexpr>->!
-<assign>->@KEYWORD@<ID>@EQUAL@<exprpart><extraassign>@END@
+<assign>->@KEYWORD@@ID@@EQUAL@<exprpart><extraassign>@END@
 <assign>->@ID@<factassign>
 <factassign>-><ALLOPAS>@END@
-<factassogm>-><ALLOPA><exprent>
-<extraassign>->@COMMA@@ID@@EQUAL@<exrpart><extraassign>
+<factassogm>-><ALLOPA><expr>@END@
+<extraassign>->@COMMA@@ID@@EQUAL@<exprpart><extraassign>
 <ALLOPA>->@OPA@
 <ALLOPA>->@PROP@@OPA@
 <ALLOPAS>->@OPAS@
