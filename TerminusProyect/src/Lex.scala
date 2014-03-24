@@ -3,6 +3,8 @@ import scala.util.control._
 import scala.io.Source._
 
 object Lex{
+	var tokens: List[List[String]] = List()
+  
 	def analyze(F_SourceCode: String): List[List[String]] ={
 	  
 	  var TokenList: List[List[String]] = List()

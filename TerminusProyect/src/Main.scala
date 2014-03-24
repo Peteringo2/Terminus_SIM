@@ -1,17 +1,24 @@
 import scala.io.Source._
 object Lecture {
 
-  def main(args: Array[String]){
+  def main(args: Array[String]): Unit = {
 		Grammar.generateGrammar("Grammar.txt")
-		
 		println("Gramatica:")
 		println(Grammar.Grammar + "\n\n")
 		println("los firsts son: ")
-		println(Grammar.getFirsts+ "\n\n")
+		Grammar.getFirsts
+		println(Grammar.Firsts + "\n\n")
+		TopDown.generateTable
+		println("La tabla top Down es: ")
+		println(TopDown.Table + "\n\n")
 		
-		val tokens: List[List[String]] = (Lex.analyze("file.txt"))
-		println(tokens)
-		println(SymbolTableGenerator.SymbolTable)
+		Lex.tokens = (Lex.analyze("file.txt"))
+		println("tokens: \n" + Lex.tokens)
+		println("Symbol Table: \n" + SymbolTableGenerator.SymbolTable)
+		
+		//println(TopDown.Table(Tuple2("<content>","DO")))
+		
+		//println(TopDown.SearchLL)
 		
 		ErrorLog.S.close()
   }
