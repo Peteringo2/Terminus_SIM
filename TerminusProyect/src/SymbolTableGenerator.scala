@@ -21,12 +21,12 @@ object SymbolTableGenerator {
 		  storekey = exist(Value)
 		  if(storekey == -1){  //si no existe se agrega en la tabla:
 			  SymbolTable +=((CurrentKey -> Value))
-			  newTuple = remove(Value,newTuple)
+			  newTuple = newTuple.dropRight(1)
 			  newTuple = newTuple ::: List(CurrentKey+"")
 			  CurrentKey+=1
 		  }else{
 		    SymbolTable +=((storekey -> Value))
-		    newTuple = remove(Value,newTuple)
+		    newTuple = newTuple.dropRight(1)
 			newTuple = newTuple ::: List(storekey+"")
 			return newTuple
 		  }
@@ -36,8 +36,6 @@ object SymbolTableGenerator {
 		return newTuple
 	  	
     }
-	
-	def remove(value: String, list: List[String]) = list diff List(value)
 	
 	def exist(Value:String): Int ={
 	  	SymbolTable.keys.foreach{ i => 
