@@ -44,7 +44,6 @@ OPENPAR \(
 CLOSEPAR \) 
 OPENKEY \{ 
 CLOSEKEY \} 
-END \\n 
 EQUAL = 
 ID [a-zA-Z]+[a-zA-Z0-9]* 
 STRINGVALUE \"[a-zA-Z0-9]*\" 
