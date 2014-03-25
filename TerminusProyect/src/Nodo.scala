@@ -1,22 +1,24 @@
-import scala.collection.mutable.Map
-
 class Nodo(val name : Int){
   
-  val mapa =  Map[Any,Any]()
+  var mapa =  Map[Any,Any]()
   var pointers = List[Int]()
     
   def addToPointers(x: Int){
     pointers ::= x
   }
   
-  def addListToMap(listToAdd: List[(Any,Any)]){
-    
-    for(l <- listToAdd)
-      addToMap(l._1, l._2)
-    
+  def addMap(m : Map[Any, List[(Any,Any)]]){
+    mapa ++= m
   }
   
-  def addToMap(p :(_,_)){
-    this.mapa += p._1 -> p._2
-  }
+//  def addListToMap(listToAdd: List[(Any, List[(Any,Any)])]){
+//    
+//    for(l <- listToAdd)
+//      addToMap(l._1, l._2)
+//    
+//  }
+//  
+//  def addToMap(key : Any, p : List[(_,_)]){
+//    this.mapa += key -> p
+//  }
 }
