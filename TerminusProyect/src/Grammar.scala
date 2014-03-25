@@ -6,6 +6,7 @@ object Grammar {
 	val token = ("@[a-zA-Z]+@").r
 	val NonTerminal = ("<[a-zA-Z]+>").r
 	var Firsts:Map[String,List[String]] = Map()
+	var Follows:Map[String,Set[String]] = Map()
 	
 	def generateGrammar(GrammarSource:String){
      val GrammarCodeLine = fromFile(GrammarSource).getLines
@@ -100,7 +101,7 @@ object Grammar {
 	  			)	
 	  		)
 	  	}
-
+	  	Follows = follows
 	  return follows
    }
 }
