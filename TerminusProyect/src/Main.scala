@@ -10,6 +10,9 @@ object Lecture {
 		println(Grammar.Firsts + "\n\n")
 		println("los follows:")
 		println(Grammar.getFollows + "\n\n")
+		
+		val r = new BottomUp
+		r.nodeClosureCreater("<S>", 0)
 //		TopDown.generateTable
 //		println("La tabla top Down es: ")
 //		println(TopDown.Table + "\n\n")
