@@ -5,14 +5,27 @@ object Lecture {
 		Grammar.generateGrammar("Grammar.txt")
 		println("Gramatica:")
 		println(Grammar.Grammar + "\n\n")
-		println("los firsts son: ")
-		Grammar.getFirsts
-		println(Grammar.Firsts + "\n\n")
-		println("los follows:")
-		println(Grammar.getFollows + "\n\n")
+//		println("los firsts son: ")
+//		Grammar.getFirsts
+//		println(Grammar.Firsts + "\n\n")
+//		println("los follows:")
+//		println(Grammar.getFollows + "\n\n")
 		
 		val r = new BottomUp
-		r.nodeClosureCreater("<S>", 0)
+		val root = new Nodo(0)	  
+		root.addMap(r.getClosure("<S>", 0))
+		//println("inicial" + root.mapa)
+		r.lista_nodos = Set(root)
+		r.nodeClosureCreater(root)
+		
+		println("nodos")
+		for(x <- r.lista_nodos){
+		  println("Indice: " + x.name)
+		  println("Punteros: " + x.pointers)
+		  println("Mapa: " + x.mapa)
+		  println()
+		}
+		  
 //		TopDown.generateTable
 //		println("La tabla top Down es: ")
 //		println(TopDown.Table + "\n\n")

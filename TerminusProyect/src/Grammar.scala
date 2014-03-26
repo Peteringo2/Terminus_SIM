@@ -66,13 +66,17 @@ object Grammar {
 	  	var changes : Boolean = true //variable para saber si hubo cambios en el ciclo
 	  	Grammar.keys.foreach(key => follows += (key -> Set() ) ) //iniciamos follow con todos los no terminales
 	  	follows += ("<S>" -> Set("$")) // inicia el follow de <S> con el símbolo de $
-
 	  	while(changes){
 	  		changes = false
 	  		follows.keys.foreach(prod =>
 	  			Grammar(prod).foreach(x => 
 	  				for(a : String <- NonTerminal findAllIn x){
-	  					var index : Int = (x.indexOfSlice(a) + a.length)
+	  					var i = countSubstring(x, a);
+	  					var sub_index = 0;
+	  					while(i > 0){
+	  					i -= 1
+	  					var index : Int = (x.indexOf(a, sub_index) + a.length)
+	  					sub_index += a.length
 	  					var set = follows(a)
 	  					var new_set : Set[String] = Set()
 	  					if(index >= x.length)
@@ -82,13 +86,25 @@ object Grammar {
 	  					    new_set = Set((token findFirstIn x.substring(index)).mkString("").replaceAll("@", ""))
 	  					}
 	  					else if(x(index) == '<'){
-	  						val beta = (NonTerminal findFirstIn x.substring(index)).mkString("")
+	  					    
+	  						var beta = (NonTerminal findFirstIn x.substring(index)).mkString("")
    		 					new_set = set.union(Firsts(beta).toSet.filter(a =>  a != "!") )
-   		 					if(Firsts(beta).contains("!"))
-   		 						new_set = new_set.union(follows(prod))
+   		 					var beta_index = index
+   		 					while(Firsts(beta).contains("!") && beta_index < x.length){
+   		 					  beta_index += beta.length
+   		 					  if(beta_index >= x.length)
+   		 					    new_set = new_set.union(follows(prod))
+   		 					  else if(x(beta_index) == '<') {
+   		 					    beta = (NonTerminal findFirstIn x.substring(beta_index)).mkString("")  
+   		 					    new_set = new_set.union(Firsts(beta).toSet.filter(a => a != "!"))
+   		 					  }
+   		 					  else
+   		 					    new_set = new_set.union(Set((token findFirstIn x.substring(beta_index)).mkString("").replaceAll("@", "")))	
+   		 					}
+	  						if(beta_index > x.length) new_set = new_set.union(follows(prod))
 	  					}
 	  					
-	  					var flag = false;
+	  					var flag = false
 	  					new_set.foreach(x => if(!set.contains(x)) flag = true)
 	  					
 	  					if(flag){
@@ -97,11 +113,22 @@ object Grammar {
    		 					follows += (a -> follow_a)
    		 					changes = true
    		 				}
+	  					}
 	  				}
 	  			)	
 	  		)
+	  		
 	  	}
 	  	Follows = follows
 	  return follows
    }
+	
+	def countSubstring(str1:String, str2:String):Int={
+	  def count(pos:Int, c:Int):Int={
+      val idx=str1 indexOf(str2, pos)
+      if(idx == -1) c else count(idx+str2.size, c+1)
+   }
+   count(0,0)
+}
+	
 }
