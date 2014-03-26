@@ -5,6 +5,7 @@ object ErrorLog {
   val ErrorDic:Map[Int,String] = Map(1->"Lexical",2-> "Grammar",3->"Semantic")
   
   def writeLog(Type:Int, Error:String, Line:Int){
+	  	println("imprimi algo")
     	S.println(ErrorDic(Type)+" Error on: " + Error + " On line: " + Line)
 	}
 

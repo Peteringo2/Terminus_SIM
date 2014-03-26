@@ -1,4 +1,5 @@
 import scala.io.Source._
+import scala.util.control.Breaks
 
 object Grammar {
 	
@@ -36,7 +37,49 @@ object Grammar {
             
 	  }
 	  Firsts = first
+	  reFirst()
+	  eleminateRepetedFirsts()
     }
+	
+	def eleminateRepetedFirsts()={
+	  Firsts.keys.foreach{i =>
+	    Firsts += (i -> Firsts(i).removeDuplicates)
+	  }
+	}
+	
+	def reFirst()={
+		val searchLoop = new Breaks
+		var Terminal: List[String] = List()
+				
+		Firsts.keys.foreach{i =>
+			  if(Firsts(i).contains("!")){
+				  searchLoop.breakable{
+				  for (x <- Grammar(i)){
+				    val nextProd = (NonTerminal findFirstIn x).mkString("")
+				    var newProduction = x.replaceFirst(nextProd, "")
+				    if(newProduction.charAt(0) == '<'){
+					      val find = (NonTerminal findFirstIn newProduction).mkString("")
+					      var temp = Firsts(i)
+					      temp = temp.take(Terminal.indexOf("!")-1) ::: temp.takeRight(temp.indexOf("!")+1)
+					      temp = temp ::: Firsts(find)
+					      Firsts += (i -> temp)
+				      
+				    }else if(newProduction.charAt(0) == '@'){
+					      val find = (token findFirstIn newProduction).mkString("")
+					      var temp = Firsts(i)
+					      temp = temp.take(Terminal.indexOf("!")-1) ::: temp.takeRight(temp.indexOf("!")+1)
+					      temp = temp ::: List(find.replaceAll("@", ""))
+					      Firsts += (i -> temp)
+					      searchLoop.break
+				      
+				    }else{
+				      searchLoop.break
+				    }
+				  }
+				  }
+			  }
+	  	}  
+	}
 	
 	def firstTree(i:String):List[String] ={
 	  var Terminal: List[String] = List()
