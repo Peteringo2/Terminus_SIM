@@ -5,10 +5,10 @@ object Lecture {
 		Grammar.generateGrammar("Grammar.txt")
 		println("Gramatica:")
 		println(Grammar.Grammar + "\n\n")
-//		println("los firsts son: ")
-//		Grammar.getFirsts
-//		println(Grammar.Firsts + "\n\n")
-//		println("los follows:")
+		println("los firsts son: ")
+		Grammar.getFirsts
+		println(Grammar.Firsts + "\n\n")
+		println("los follows:")
 //		println(Grammar.getFollows + "\n\n")
 		
 		val r = new BottomUp  

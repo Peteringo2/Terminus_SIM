@@ -17,7 +17,7 @@ object Grammar {
     	 val production: Array[String] = x.split("->")
     	 if (Grammar.contains(production(0))){  //si ya existe la key
     		 Prod = Grammar(production(0)) 
-    		 Prod = Prod ::: List(production(1))
+    		 Prod = Prod ::: List(production(1))	
     		 Grammar +=(production(0) -> Prod)
     	 }else{
     	   Prod = List(production(1))
