@@ -1,13 +1,13 @@
 class Nodo(val name : Int){
   
-  var mapa =  Map[Any,List[(Any,Any)]]()
+  var mapa =  Map[Any,Set[(Any,Any)]]()
   var pointers = List[(String, Int)]()
     
   def addToPointers(x: (String, Int)){
     pointers ::= x
   }
   
-  def addMap(m : Map[Any, List[(Any,Any)]]){
+  def addMap(m : Map[Any, Set[(Any,Any)]]){
     mapa ++= m
   }
   

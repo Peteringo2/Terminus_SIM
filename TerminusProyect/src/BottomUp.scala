@@ -5,22 +5,22 @@ class BottomUp{
   var nodes_names = 1
   var lista_nodos : Set[Nodo] = Set()
   
-  def getClosure(charToClosure :String, start : Int): Map[Any, List[(Any,Any)]] = {	  
-	  var map : Map[Any, List[(Any,Any)]] = Map()
-	  map += (charToClosure -> List())
+  def getClosure(charToClosure :String, start : Int): Map[Any, Set[(Any,Any)]] = {	  
+	  var map : Map[Any, Set[(Any,Any)]] = Map()
+	  map += (charToClosure -> Set())
 	  for(str_chain <- Grammar.Grammar(charToClosure))
 	  {
 	     if(str_chain != "!") {
 			var indices = getStringsToProcess(str_chain, start)
 		    for(index <- indices){
-				var temp =  map(charToClosure); temp = temp ::: List((str_chain, index));
+				var temp =  map(charToClosure); temp = temp.union(Set((str_chain, index)));
 				if(index < str_chain.length){
 					str_chain charAt index match{
 					case ('@') => map += (charToClosure -> temp)
 					case ('<') => {	
 					  map ++= (getClosure(Grammar.NonTerminal.findFirstIn(str_chain.substring(index)).mkString(""), 0))
 					  var prod = map(charToClosure)
-					  prod = prod ::: temp
+					  prod = prod.union(temp)
 					  map += (charToClosure -> prod)
 
 					  }
@@ -52,7 +52,6 @@ class BottomUp{
 	 }
      else 
        indexes = indexes.union(Set(index))
-      if(cadena == "@END@<enter>") println(indexes)
 	 indexes
   }
 
@@ -65,8 +64,6 @@ class BottomUp{
 			    	  if(start <= lista_tuples._1.toString.length()){
 			    	  var nuevo_nodo = new Nodo(nodes_names)
 					  
-			    	  
-			    	  if(n.name == 3) println("llave" + key + "index" + start)
 					  nuevo_nodo.addMap(getClosure(key.toString, start))
 					  
 					  var name = equalsMaps(nuevo_nodo)
