@@ -11,12 +11,11 @@ object Lecture {
 //		println("los follows:")
 //		println(Grammar.getFollows + "\n\n")
 		
-		val r = new BottomUp
-		val root = new Nodo(0)	  
-		root.addMap(r.getClosure("<S>", 0))
+		val r = new BottomUp  
+		r.root.addMap(r.getClosure("<S>", 0))
 		//println("inicial" + root.mapa)
-		r.lista_nodos = Set(root)
-		r.nodeClosureCreater(root)
+		r.lista_nodos = Set(r.root)
+		r.nodeClosureCreater(r.root)
 		
 		println("nodos")
 		for(x <- r.lista_nodos){
@@ -25,6 +24,22 @@ object Lecture {
 		  println("Mapa: " + x.mapa)
 		  println()
 		}
+		
+		r returnRootToList
+		
+		r getTerminalAndNonTerminalForSLRTable
+		
+		r getReduceForSLRTable
+		
+		println(r tablaSLR)
+		
+//		b SLRParse
+		
+		
+		
+		
+		
+		
 		  
 //		TopDown.generateTable
 //		println("La tabla top Down es: ")
