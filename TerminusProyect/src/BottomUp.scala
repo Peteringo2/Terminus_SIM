@@ -4,31 +4,33 @@ class BottomUp{
   val tokenator = ("@[a-zA-Z]+@|<[a-zA-Z]+>").r
   var nodes_names = 1
   var lista_nodos : Set[Nodo] = Set()
+  var root = new Nodo(0)
   
-  def getClosure(charToClosure :String, start : Int): Map[Any, Set[(Any,Any)]] = {	  
-	  var map : Map[Any, Set[(Any,Any)]] = Map()
-	  map += (charToClosure -> Set())
-	  for(str_chain <- Grammar.Grammar(charToClosure))
+  def getClosure(key : String, producciones : List[String], start : Int): Map[Any, Set[(String,Any)]] = {	  
+	  var map : Map[Any, Set[(String,Any)]] = Map()
+	  map += (key -> Set())
+	  for(str_chain <- producciones)
 	  {
 	     if(str_chain != "!") {
 			var indices = getStringsToProcess(str_chain, start)
 		    for(index <- indices){
-				var temp =  map(charToClosure); temp = temp.union(Set((str_chain, index)));
+				var temp =  map(key); temp = temp.union(Set((str_chain, index)));
 				if(index < str_chain.length){
 					str_chain charAt index match{
-					case ('@') => map += (charToClosure -> temp)
+					case ('@') => map += (key -> temp)
 					case ('<') => {	
-					  map ++= (getClosure(Grammar.NonTerminal.findFirstIn(str_chain.substring(index)).mkString(""), 0))
-					  var prod = map(charToClosure)
+					  var nonterminal = Grammar.NonTerminal.findFirstIn(str_chain.substring(index)).mkString("")
+					  map ++= (getClosure(nonterminal, Grammar.Grammar(nonterminal), 0))
+					  var prod = map(key)
 					  prod = prod.union(temp)
-					  map += (charToClosure -> prod)
+					  map += (key -> prod)
 
 					  }
 					case _ => List((1,1,1))
 					}
 				}
 				else 
-					map += (charToClosure -> temp)
+					map += (key -> temp)
 			}	  
 		}
 	  }
@@ -63,17 +65,17 @@ class BottomUp{
 					  
 			    	  if(start <= lista_tuples._1.toString.length()){
 			    	  var nuevo_nodo = new Nodo(nodes_names)
-					  
-					  nuevo_nodo.addMap(getClosure(key.toString, start))
+			    	  
+					  nuevo_nodo.addMap(getClosure(key.toString, List(lista_tuples._1), start))
 					  
 					  var name = equalsMaps(nuevo_nodo)
 					  
 					  if(name != -1) n.addToPointers((letra_movimiento, name))
 					  else{ 
-//					    println("sali del nodo: " + n.name + " llave " + key.toString + " movi: " + letra_movimiento)
-//					  println("name: " + nuevo_nodo.name)
-//					  println("metroid" + nuevo_nodo.mapa)
-//					  println()
+					  println("sali del nodo: " + n.name + " llave " + key.toString + " movi: " + letra_movimiento)
+					  println("name: " + nuevo_nodo.name)
+					  println("metroid" + nuevo_nodo.mapa)
+					  println()
 					    lista_nodos = lista_nodos.union(Set(nuevo_nodo))
 					    nodes_names += 1
 					    n.addToPointers((letra_movimiento, nuevo_nodo.name)) 
@@ -101,5 +103,6 @@ class BottomUp{
     return true
   }
 
+  
 
 }
