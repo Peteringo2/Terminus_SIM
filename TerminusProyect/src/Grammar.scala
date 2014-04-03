@@ -1,33 +1,34 @@
 import scala.io.Source._
 import scala.util.control.Breaks
-
+/*
+ * en esta clase se obtiene la gramatica general asi como firsts y follows de la gramatica
+ */
 object Grammar {
-	
 	var Grammar:Map[String,List[String]] = Map()
 	val token = ("@[a-zA-Z]+@").r
 	val NonTerminal = ("<[a-zA-Z]+>").r
 	var Firsts:Map[String,List[String]] = Map()
 	var Follows:Map[String,Set[String]] = Map()
 	
-	def generateGrammar(GrammarSource:String){
+	def generateGrammar(GrammarSource:String){		//esta funcion agrega la gramatica a un mapa estatico
      val GrammarCodeLine = fromFile(GrammarSource).getLines
      var Prod: List[String] = List()
      
-     for(x<-GrammarCodeLine){
+     for(x<-GrammarCodeLine){		//por cada linea de gramatica agrega en lista todas las producciones
     	 val production: Array[String] = x.split("->")
-    	 if (Grammar.contains(production(0))){  //si ya existe la key
+    	 if (Grammar.contains(production(0))){  
     		 Prod = Grammar(production(0)) 
     		 Prod = Prod ::: List(production(1))	
     		 Grammar +=(production(0) -> Prod)
     	 }else{
     	   Prod = List(production(1))
-    	   Grammar +=(production(0) -> Prod)  //si no existe la key
+    	   Grammar +=(production(0) -> Prod)  
     	 } 
 	 }
     }
 	
 	
-	def getFirsts()={
+	def getFirsts()={									//funcion para obtener firsts
 	  var first:Map[String,List[String]] = Map()
 	  var Terminal: List[String] = List()
 	  
@@ -38,63 +39,82 @@ object Grammar {
 	  }
 	  Firsts = first
 	  reFirst()
+	  reFirst()
 	  eleminateRepetedFirsts()
     }
 	
-	def eleminateRepetedFirsts()={
+	def eleminateRepetedFirsts()={						//eliminamos los firsts repetidos
 	  Firsts.keys.foreach{i =>
 	    Firsts += (i -> Firsts(i).removeDuplicates)
 	  }
 	}
 	
-	def reFirst()={
+	def reFirst()={								//funcion auxiliar para obtener los firsts cuando existen epsilon enntre las producciones
 		val searchLoop = new Breaks
-		var Terminal: List[String] = List()
 				
 		Firsts.keys.foreach{i =>
-			  if(Firsts(i).contains("!")){
+		  if(Firsts(i).contains("!")){
 				  searchLoop.breakable{
 				  for (x <- Grammar(i)){
-				    val nextProd = (NonTerminal findFirstIn x).mkString("")
-				    var newProduction = x.replaceFirst(nextProd, "")
-				    if(newProduction.charAt(0) == '<'){
-					      val find = (NonTerminal findFirstIn newProduction).mkString("")
-					      var temp = Firsts(i)
-					      temp = temp.take(Terminal.indexOf("!")-1) ::: temp.takeRight(temp.indexOf("!")+1)
-					      temp = temp ::: Firsts(find)
-					      Firsts += (i -> temp)
+				    var prod = x
+				    while(prod.charAt(0) == '<'){
+				      val nextProd = (NonTerminal findFirstIn prod).mkString("")
+				      val newFirsts = Firsts(i) ::: Firsts(nextProd)
+					  Firsts += (i -> newFirsts)
+				      if (refirstTree(nextProd)){
+				         prod = prod.replaceFirst(nextProd, "")
+				         if(prod.charAt(0) =='<'){
+					         val temp = (NonTerminal findFirstIn prod).mkString("")
+					         val newFirsts = Firsts(i) ::: Firsts(temp)
+					         Firsts += (i -> newFirsts)
+				         }else{
+				           val temp = (token findFirstIn prod).mkString("")
+				           val newFirsts = Firsts(i) ::: List(temp.replace("@", ""))
+				           Firsts += (i -> newFirsts)
+				           searchLoop.break
+				         }
+				      }else{
+				        searchLoop.break
+				      }
 				      
-				    }else if(newProduction.charAt(0) == '@'){
-					      val find = (token findFirstIn newProduction).mkString("")
-					      var temp = Firsts(i)
-					      temp = temp.take(Terminal.indexOf("!")-1) ::: temp.takeRight(temp.indexOf("!")+1)
-					      temp = temp ::: List(find.replaceAll("@", ""))
-					      Firsts += (i -> temp)
-					      searchLoop.break
-				      
-				    }else{
-				      searchLoop.break
 				    }
-				  }
-				  }
-			  }
+				    
+				}
+				}
+			}
 	  	}  
 	}
 	
-	def firstTree(i:String):List[String] ={
+	def refirstTree(i:String):Boolean ={			//Funcion recursiva para obtener firsts
+	  var hay= false
+	  for (x <- Grammar(i)){
+              if(x.charAt(0) == '<'){							//si es no terminal baja nivel
+                val find = (NonTerminal findFirstIn x).mkString("")
+                hay = refirstTree(find)
+              } 
+		  	  if(x.charAt(0) == '!'){					//agrega epsilons
+		  		  hay = true
+              }
+		  	 
+       }     
+	  return hay
+	  
+	}
+	
+	def firstTree(i:String):List[String] ={			//Funcion recursiva para obtener firsts
 	  var Terminal: List[String] = List()
 	  for (x <- Grammar(i)){
-              if(x.charAt(0) == '<'){
+              if(x.charAt(0) == '<'){							//si es no terminal baja nivel
                 val find = (NonTerminal findFirstIn x).mkString("")
                 Terminal = Terminal ::: firstTree(find) 
                 
               } 
 		  	  if(x.charAt(0) == '@'){
-                 val find = (token findFirstIn x).mkString("")
+                 val find = (token findFirstIn x).mkString("")   //si es terminal agrega a firsts
                  Terminal = Terminal ::: List(find.replaceAll("@", ""))
                 
               }
-		  	  if(x.charAt(0) == '!'){
+		  	  if(x.charAt(0) == '!'){					//agrega epsilons
             	  Terminal = Terminal ::: List(x.charAt(0)+"")
               }
 		  	 

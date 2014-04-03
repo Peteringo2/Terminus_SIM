@@ -19,7 +19,7 @@
 <else>->!
 <loop>-><while>
 <loop>-><dowhile>
-<while>->while@OPENPAR@<bool>@CLOSEPAR@<enter>@OPENKEY@<enter><content><enter>@CLOSEKEY@<enter>
+<while>->@WHILE@@OPENPAR@<bool>@CLOSEPAR@<enter>@OPENKEY@<enter><content><enter>@CLOSEKEY@<enter>
 <dowhile>->@DO@<enter>@OPENKEY@<enter><content><enter>@CLOSEKEY@while@OPENPAR@<bool>@CLOSEPAR@<enter>
 <NumberValue>->@NUMVALUE@
 <NumberValue>->@FLOATVALUE@
@@ -33,11 +33,12 @@
 <expr>->@ID@<factexpr>
 <expr>->@OPENPAR@<expr>@CLOSEPAR@<expro>
 <factexpr>->@OPENPAR@<commaexprs>@CLOSEPAR@<expro>
-<factexpr>-><expro>
+<factexpr>->@OP@ <expr> <expro>
+<factexpr>->!
 <expro>->@OP@<expr><expro>
 <expro>->!
-<term>->@NumberValue@
-<term>->@StringValue@
+<term>->@NUMVALUE@
+<term>->@STRINGVALUE@
 <commaexprs>-><expr><commaexpr>
 <commaexprs>->!
 <commaexpr>->@COMMA@<expr><commaexpr>
@@ -47,12 +48,13 @@
 <factassign>-><ALLOPAS><specialenter>
 <factassogm>-><ALLOPA><expr><specialenter>
 <extraassign>->@COMMA@@ID@@EQUAL@<exprpart><extraassign>
+<extraasign>->!
 <ALLOPA>->@OPA@
 <ALLOPA>->@PROP@@OPA@
 <ALLOPAS>->@OPAS@
 <ALLOPAS>->@PROP@@OPAS@
 <enter>->@ENTER@<enter>
-<enter>-!
+<enter>->!
 <specialenter>->@ENTER@<specialenters>
 <specialenters>->@ENTER@<specialenters>
 <specialenters>->!
