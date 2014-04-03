@@ -1,4 +1,5 @@
 import scala.io.Source._
+import scala.util.control.Breaks
 
 object Grammar {
 	
@@ -16,7 +17,7 @@ object Grammar {
     	 val production: Array[String] = x.split("->")
     	 if (Grammar.contains(production(0))){  //si ya existe la key
     		 Prod = Grammar(production(0)) 
-    		 Prod = Prod ::: List(production(1))
+    		 Prod = Prod ::: List(production(1))	
     		 Grammar +=(production(0) -> Prod)
     	 }else{
     	   Prod = List(production(1))
@@ -36,7 +37,49 @@ object Grammar {
             
 	  }
 	  Firsts = first
+	  reFirst()
+	  eleminateRepetedFirsts()
     }
+	
+	def eleminateRepetedFirsts()={
+	  Firsts.keys.foreach{i =>
+	    Firsts += (i -> Firsts(i).removeDuplicates)
+	  }
+	}
+	
+	def reFirst()={
+		val searchLoop = new Breaks
+		var Terminal: List[String] = List()
+				
+		Firsts.keys.foreach{i =>
+			  if(Firsts(i).contains("!")){
+				  searchLoop.breakable{
+				  for (x <- Grammar(i)){
+				    val nextProd = (NonTerminal findFirstIn x).mkString("")
+				    var newProduction = x.replaceFirst(nextProd, "")
+				    if(newProduction.charAt(0) == '<'){
+					      val find = (NonTerminal findFirstIn newProduction).mkString("")
+					      var temp = Firsts(i)
+					      temp = temp.take(Terminal.indexOf("!")-1) ::: temp.takeRight(temp.indexOf("!")+1)
+					      temp = temp ::: Firsts(find)
+					      Firsts += (i -> temp)
+				      
+				    }else if(newProduction.charAt(0) == '@'){
+					      val find = (token findFirstIn newProduction).mkString("")
+					      var temp = Firsts(i)
+					      temp = temp.take(Terminal.indexOf("!")-1) ::: temp.takeRight(temp.indexOf("!")+1)
+					      temp = temp ::: List(find.replaceAll("@", ""))
+					      Firsts += (i -> temp)
+					      searchLoop.break
+				      
+				    }else{
+				      searchLoop.break
+				    }
+				  }
+				  }
+			  }
+	  	}  
+	}
 	
 	def firstTree(i:String):List[String] ={
 	  var Terminal: List[String] = List()
@@ -73,9 +116,10 @@ object Grammar {
 	  				for(a : String <- NonTerminal findAllIn x){
 	  					var i = countSubstring(x, a);
 	  					var sub_index = 0;
+	  					var index = 0
 	  					while(i > 0){
 	  					i -= 1
-	  					var index : Int = (x.indexOf(a, sub_index) + a.length)
+	  					index  = (x.indexOf(a, sub_index + index) + a.length)
 	  					sub_index += a.length
 	  					var set = follows(a)
 	  					var new_set : Set[String] = Set()
@@ -88,6 +132,7 @@ object Grammar {
 	  					else if(x(index) == '<'){
 	  					    
 	  						var beta = (NonTerminal findFirstIn x.substring(index)).mkString("")
+	  						//if(beta == "<content>") println("asdfjklñ---" + Firsts(beta))
    		 					new_set = set.union(Firsts(beta).toSet.filter(a =>  a != "!") )
    		 					var beta_index = index
    		 					while(Firsts(beta).contains("!") && beta_index < x.length){
