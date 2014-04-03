@@ -1,6 +1,7 @@
 
 class BottomUp{  
 	
+	
   val tokenator = ("@[a-zA-Z]+@|<[a-zA-Z]+>").r
   var nodes_names = 1
   var lista_nodos : Set[Nodo] = Set()
