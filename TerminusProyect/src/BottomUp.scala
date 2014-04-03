@@ -11,30 +11,31 @@ class BottomUp{
   var entrada = List[String]()
   var root = new Nodo(0)
   
-  def getClosure(charToClosure :String, start : Int): Map[Any, Set[(Any,Any)]] = {	  
-	  var map : Map[Any, Set[(Any,Any)]] = Map()
-	  map += (charToClosure -> Set())
-	  for(str_chain <- Grammar.Grammar(charToClosure))
+  def getClosure(key : String, producciones : List[String], start : Int): Map[Any, Set[(String,Any)]] = {	  
+	  var map : Map[Any, Set[(String,Any)]] = Map()
+	  map += (key -> Set())
+	  for(str_chain <- producciones)
 	  {
 	     if(str_chain != "!") {
 			var indices = getStringsToProcess(str_chain, start)
 		    for(index <- indices){
-				var temp =  map(charToClosure); temp = temp.union(Set((str_chain, index)));
+				var temp =  map(key); temp = temp.union(Set((str_chain, index)));
 				if(index < str_chain.length){
 					str_chain charAt index match{
-					case ('@') => map += (charToClosure -> temp)
+					case ('@') => map += (key -> temp)
 					case ('<') => {	
-					  map ++= (getClosure(Grammar.NonTerminal.findFirstIn(str_chain.substring(index)).mkString(""), 0))
-					  var prod = map(charToClosure)
+					  var nonterminal = Grammar.NonTerminal.findFirstIn(str_chain.substring(index)).mkString("")
+					  map ++= (getClosure(nonterminal, Grammar.Grammar(nonterminal), 0))
+					  var prod = map(key)
 					  prod = prod.union(temp)
-					  map += (charToClosure -> prod)
+					  map += (key -> prod)
 
 					  }
 					case _ => List((1,1,1))
 					}
 				}
 				else 
-					map += (charToClosure -> temp)
+					map += (key -> temp)
 			}	  
 		}
 	  }
@@ -69,17 +70,17 @@ class BottomUp{
 					  
 			    	  if(start <= lista_tuples._1.toString.length()){
 			    	  var nuevo_nodo = new Nodo(nodes_names)
-					  
-					  nuevo_nodo.addMap(getClosure(key.toString, start))
+			    	  
+					  nuevo_nodo.addMap(getClosure(key.toString, List(lista_tuples._1), start))
 					  
 					  var name = equalsMaps(nuevo_nodo)
 					  
 					  if(name != -1) n.addToPointers((letra_movimiento, name))
 					  else{ 
-//					    println("sali del nodo: " + n.name + " llave " + key.toString + " movi: " + letra_movimiento)
-//					  println("name: " + nuevo_nodo.name)
-//					  println("metroid" + nuevo_nodo.mapa)
-//					  println()
+					  println("sali del nodo: " + n.name + " llave " + key.toString + " movi: " + letra_movimiento)
+					  println("name: " + nuevo_nodo.name)
+					  println("metroid" + nuevo_nodo.mapa)
+					  println()
 					    lista_nodos = lista_nodos.union(Set(nuevo_nodo))
 					    nodes_names += 1
 					    n.addToPointers((letra_movimiento, nuevo_nodo.name)) 
@@ -119,7 +120,7 @@ class BottomUp{
 
 	def getReduceForSLRTable{
 	  
-	  //for(x <- listOfRoot) println(x)
+	  for(x <- listOfRoot) println(x)
 	  
 		for(n <- lista_nodos; key  <- n.mapa.keys ; prodThis <- n.mapa(key) if prodThis._1.toString.length <= prodThis._2.asInstanceOf[Int] ; 
 			follow <- Grammar.Follows(key toString) ; lineIndex <- 0 until listOfRoot.length if listOfRoot(lineIndex) == (key toString, prodThis._1.toString)){
@@ -140,6 +141,8 @@ class BottomUp{
 				//for(z <- entrada) println("zora "+z)
 				while(!flag){
 					var key = (states.head, entrada.head)
+							println("pila de estados --- " + states + " simbolos --- " + symbols + " entrada --- " + entrada)
+							println("tope stack: " + states.head + "top entrada: " + entrada.head)
 							if(tablaSLR.keys.exists(_==key)){
 								tablaSLR(key).charAt(0) match {
 								case 'S' => {
@@ -148,18 +151,17 @@ class BottomUp{
 											entrada = entrada.tail
 								}
 								case 'R' => {
-
 //											val sizeOfProd = listOfRoot(tablaSLR(key).substring(1).toInt)._2.length									
 											var produccion = listOfRoot(tablaSLR(key).substring(1).toInt)
 											var num_pop = simbolsToPop(produccion._2, symbols)
-											println("num_pop" + num_pop)
+											//println("num_pop: " + num_pop)
 											for(symbol <- 0 until num_pop){
 												states = states.tail
 														symbols = symbols.tail
 											}
 											
 											symbols ::= listOfRoot(tablaSLR(key).substring(1).toInt)._1
-											println("pit" + (states.head, symbols.head))
+											//println("pit" + (states.head, symbols.head))
 											states ::= tablaSLR((states.head, symbols.head)).substring(1).toInt
 								
 								}
@@ -195,7 +197,7 @@ class BottomUp{
 		  var encounters = 0
 		  
 		  var pasada = num_tokens - 1
-		  println("pasada " + pasada + "len " + c2.length)
+		  //println("pasada " + pasada + "len " + c2.length)
 		  if(pasada < c2.length){
 		  while(index < c1.length){
 			  var str_com = tokenator.findFirstIn(c1.substring(index)).mkString("")

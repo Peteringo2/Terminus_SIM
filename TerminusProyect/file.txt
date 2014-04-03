@@ -1,2 +1,4 @@
-wormhole planetn 3421..231 = #new Create_Universe x
-x = planetn aseas wormhole 3423hola a x
+create_universe{
+6 == 6
+string str = "hola"
+}

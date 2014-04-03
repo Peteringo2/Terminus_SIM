@@ -9,13 +9,17 @@ object Lecture {
 		Grammar.getFirsts
 		println(Grammar.Firsts + "\n\n")
 		println("los follows:")
-//		println(Grammar.getFollows + "\n\n")
+		println(Grammar.getFollows + "\n\n")
 		
-		val r = new BottomUp  
-		r.root.addMap(r.getClosure("<S>", 0))
+		Lex.tokens = Lex.analyze("file.txt")
+		
+		val r = new BottomUp	  
+		//r.root.addMap(r.getClosure("<S>", Grammar.Grammar("<S>"), 0))
+		r.root.addMap(r.getClosure("<S>", Grammar.Grammar("<S>"), 0))
 		//println("inicial" + root.mapa)
 		r.lista_nodos = Set(r.root)
 		r.nodeClosureCreater(r.root)
+
 		
 		println("nodos")
 		for(x <- r.lista_nodos){
@@ -31,15 +35,9 @@ object Lecture {
 		
 		r getReduceForSLRTable
 		
-		println(r tablaSLR)
+		for(key <- r.tablaSLR.keys) println("llave: " + key + " --- " + r.tablaSLR(key))
 		
-//		b SLRParse
-		
-		
-		
-		
-		
-		
+		r SLRParse
 		  
 //		TopDown.generateTable
 //		println("La tabla top Down es: ")

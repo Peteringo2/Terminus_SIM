@@ -116,9 +116,10 @@ object Grammar {
 	  				for(a : String <- NonTerminal findAllIn x){
 	  					var i = countSubstring(x, a);
 	  					var sub_index = 0;
+	  					var index = 0
 	  					while(i > 0){
 	  					i -= 1
-	  					var index : Int = (x.indexOf(a, sub_index) + a.length)
+	  					index  = (x.indexOf(a, sub_index + index) + a.length)
 	  					sub_index += a.length
 	  					var set = follows(a)
 	  					var new_set : Set[String] = Set()
@@ -131,6 +132,7 @@ object Grammar {
 	  					else if(x(index) == '<'){
 	  					    
 	  						var beta = (NonTerminal findFirstIn x.substring(index)).mkString("")
+	  						//if(beta == "<content>") println("asdfjklñ---" + Firsts(beta))
    		 					new_set = set.union(Firsts(beta).toSet.filter(a =>  a != "!") )
    		 					var beta_index = index
    		 					while(Firsts(beta).contains("!") && beta_index < x.length){
