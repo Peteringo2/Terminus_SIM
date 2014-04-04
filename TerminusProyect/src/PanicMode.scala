@@ -1,22 +1,17 @@
 object PanicMode { 
-	
-	def RestoreSync()={
+	/*
+	 * clase que recupera el error en panicMode de LL(1)
+	 */
+	def RestoreSync()={			//SI ENCUENTRA EN LA TABLA SYNC
 		var recuperado=false
-		println("entre a sync")
-		TopDown.Pila = TopDown.Pila.tail
-		if(TopDown.Pila.head.equals("$")){
-		  println("si es primero")
-		  TopDown.Pila = TopDown.Pila.::("<S>")
-		  println(TopDown.Pila)
+		TopDown.Pila = TopDown.Pila.tail	//SACA UN ELEMENTO DE LA PILA
+		if(TopDown.Pila.head.equals("$")){		//CHECA QUE LA PILA NO QUEDE VACIA
+		  TopDown.Pila = TopDown.Pila.::("<S>")		//SI QUEDO VACIA, LLENA CON EL INICIAL Y SACA DEL INPUT HASTA ENCONTRAR UN TERMINAL VALIDO
 		  while(!TopDown.input.head.head.equals("$") && !recuperado){
-			  println(" " + TopDown.input.head.head)
 		  	  try{
-		  		  println(TopDown.Table(Tuple2("<S>",TopDown.input.head.head)))
 		  		  if(TopDown.Table(Tuple2("<S>",TopDown.input.head.head)).head.equals("sync")){ 
 		  		    TopDown.input = TopDown.input.tail
-		  		    println("estamos en " + TopDown.input )
 		  		  }else{
-		  		    println("recuperamos")
 		  		    recuperado = true
 		  		  }
 		  	
@@ -27,12 +22,11 @@ object PanicMode {
 		  	      
 		  	  }
 		  }
-		}else{
-		  TopDown.Pila = TopDown.Pila.tail
 		}
 	}
 	
-	def RestoreEmpty()={
+	def RestoreEmpty()={		//SI NO ENCOTRO SYNC EN LA TABLA SACA UN OBJETO DEL INPUT
+	  println("restore Empty")
 		TopDown.input = TopDown.input.tail
 	}
 

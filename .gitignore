@@ -1,4 +1,7 @@
 TerminusProyect/bin/
+TerminusProyect/.settings/
 .metadata/
 TerminusProyect/.cache
+TerminusProyect/.project
+TerminusProyect/.classpath
 .DS_Store
