@@ -9,10 +9,7 @@ object ErrorLog {
   val ErrorDic:Map[Int,String] = Map(1->"Lexical",2-> "Grammar",3->"Semantic") //diccionario para saber que tipo de error es
   
   def writeLog(Type:Int, Error:String, Line:Int){
-<<<<<<< HEAD
-=======
 	  	Errors = Errors + 1  //contador de errores
->>>>>>> 572baab
     	S.println(ErrorDic(Type)+" Error on: " + Error + " On line: " + Line)
 	}
 
