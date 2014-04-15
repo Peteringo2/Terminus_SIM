@@ -128,7 +128,7 @@ object Grammar {
 	  	var follows:Map[String, Set[String]] = Map()//Mapa que contiene los sets follows
 	  	var changes : Boolean = true //variable para saber si hubo cambios en el ciclo
 	  	Grammar.keys.foreach(key => follows += (key -> Set() ) ) //iniciamos follow con todos los no terminales
-	  	follows += ("<S>" -> Set("$")) // inicia el follow de <S> con el símbolo de $
+	  	follows += ("<S>" -> Set("$")) // inicia el follow de <S> con el s��mbolo de $
 	  	while(changes){
 	  		changes = false
 	  		follows.keys.foreach(prod =>
@@ -152,7 +152,7 @@ object Grammar {
 	  					else if(x(index) == '<'){
 	  					    
 	  						var beta = (NonTerminal findFirstIn x.substring(index)).mkString("")
-	  						//if(beta == "<content>") println("asdfjklñ---" + Firsts(beta))
+	  						//if(beta == "<content>") println("asdfjkl��---" + Firsts(beta))
    		 					new_set = set.union(Firsts(beta).toSet.filter(a =>  a != "!") )
    		 					var beta_index = index
    		 					while(Firsts(beta).contains("!") && beta_index < x.length){

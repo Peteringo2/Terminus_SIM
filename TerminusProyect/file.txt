@@ -1,2 +1,18 @@
-wormhole planetn 3421..231 = #new Create_Universe x
-x = planetn aseas wormhole 3423hola a x
+create_universe{
+int i = 0
+if(5 == 3){
+  int x = 5
+  if("asd" == "dsa"){
+    string str = "hasd"
+  }
+}
+elif(6 == 6){
+  int h = 4
+}
+elif(7 == 7){
+  int la = 0
+}
+else{
+  int k = 0
+}
+}

@@ -51,7 +51,7 @@ object Lex{
 			    if(find.equals("#")) comentloop.break;
 			    if(!find.equals(i)) ErrorLog.writeLog(1, i,LineNum)
 			    var tuple: List[String] = List(token(0),find)
-				tuple = SymbolTableGenerator.generate(tuple,isDef)
+//				tuple = SymbolTableGenerator.generate(tuple,isDef)
 				isDef = false
 			    tokens = tokens ::: List(tuple)
 			    if (token(0).equals("FUNCTION")||token(0).equals("FUNCTION")) isDef=true
@@ -79,8 +79,8 @@ object Lex{
 	  SourceCode = SourceCode.replace("/", " / ")
 	  SourceCode = SourceCode.replace("%", " % ")
 	  SourceCode = SourceCode.replace("*  *", "*")
-	  SourceCode = SourceCode.replace("+  +", "+")
-	  SourceCode = SourceCode.replace("-  -", "-")
+	  SourceCode = SourceCode.replace("+  +", "++")
+	  SourceCode = SourceCode.replace("-  -", "--x")
 	  SourceCode = SourceCode.replace("+  =", "+=")
 	  SourceCode = SourceCode.replace("-  =", "-=")
 	  SourceCode = SourceCode.replace("*  =", "*=")

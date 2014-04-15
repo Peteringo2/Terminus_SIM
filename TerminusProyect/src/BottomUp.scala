@@ -48,11 +48,11 @@ class BottomUp{
      if(index < cadena.length()){//entra si el indice es menor a la cadena
     	  	  var flag = cadena(index) == '<'//revisiar si es '<'
     	  	  var chain = tokenator.findFirstIn(cadena.substring(index)).mkString("")//obtenemos la cadena para ver si produce !
-    	  	  indexes = indexes.union(Set(index))//añadimos el indice default a la lsita
+    	  	  indexes = indexes.union(Set(index))//a��adimos el indice default a la lsita
 			  while(flag){//si si es '<'
 			      flag = false
 				  if(Grammar.Grammar(chain).contains("!")){//si la key produce epsilon
-					  indexes = indexes.union(Set(indexes.last + chain.length))//añadimos el nuevo indice a procesar a nuestro set
+					  indexes = indexes.union(Set(indexes.last + chain.length))//a��adimos el nuevo indice a procesar a nuestro set
 					  chain = tokenator.findFirstIn(cadena.substring(indexes.last)).mkString("")//obtenemos la siguiente cadena
 					  if(indexes.last < cadena.length) flag = cadena(indexes.last) == '<'//revisamos si se sigue cumpliendo que x(0) == '<' para saber si regresar
 				  }
@@ -78,10 +78,10 @@ class BottomUp{
 					  
 					  if(name != -1) n.addToPointers((letra_movimiento, name))
 					  else{ 
-					  println("sali del nodo: " + n.name + " llave " + key.toString + " movi: " + letra_movimiento)
-					  println("name: " + nuevo_nodo.name)
-					  println("metroid" + nuevo_nodo.mapa)
-					  println()
+//					  println("sali del nodo: " + n.name + " llave " + key.toString + " movi: " + letra_movimiento)
+//					  println("name: " + nuevo_nodo.name)
+//					  println("metroid" + nuevo_nodo.mapa)
+//					  println()
 					    lista_nodos = lista_nodos.union(Set(nuevo_nodo))
 					    nodes_names += 1
 					    n.addToPointers((letra_movimiento, nuevo_nodo.name)) 
@@ -155,7 +155,7 @@ class BottomUp{
 //											val sizeOfProd = listOfRoot(tablaSLR(key).substring(1).toInt)._2.length									
 											var produccion = listOfRoot(tablaSLR(key).substring(1).toInt)
 											var num_pop = simbolsToPop(produccion._2, symbols)
-											//println("num_pop: " + num_pop)
+											println("num_pop: " + num_pop)
 											for(symbol <- 0 until num_pop){
 												states = states.tail
 														symbols = symbols.tail
@@ -181,6 +181,9 @@ class BottomUp{
 	}
 	
 	def simbolsToPop(c1 : String, c2 : List[String]) : Int = { 
+//	    println("lista: " + c2)
+//	    println("string: " + c1)
+//	    println()
 		var num_to_pop = 0 
 		var num_arr = 0
 		var num_< = 0
@@ -188,30 +191,39 @@ class BottomUp{
 		  if(x == '<') num_< += 1
 		  if(x == '@') num_arr += 1
 		}
-		
+
 		var num_tokens = ((num_arr / 2) + num_<)
 		
 //		println("cadena: " + c1 + "cuantostokens" + num_tokens)
-		
+
 		while(num_tokens > 0){
 		  var index = 0
 		  var encounters = 0
-		  
+
 		  var pasada = num_tokens - 1
 		  //println("pasada " + pasada + "len " + c2.length)
 		  if(pasada < c2.length){
 		  while(index < c1.length){
 			  var str_com = tokenator.findFirstIn(c1.substring(index)).mkString("")
-			  index += str_com.length
-				if(str_com == c2(pasada)){
+			  //println("string: " + str_com + "ele at list: " + c2(pasada))
+			  if(str_com == c2(pasada)){
+					index += str_com.length
 				    num_to_pop += 1
-				    pasada -= 1
-				    if(pasada == -1) return num_to_pop
-				}
+			  }
+			  else{
+			    if(str_com(0) == '<'){
+			      if(Grammar.Grammar(str_com).contains("!")){
+			        index += str_com.length
+			        pasada += 1
+			      }
+			    }
+			  }
+			  pasada -= 1
+			  if(pasada == -1) return num_to_pop
 		  }
-		  
+
 		  }
-		  
+
 		  num_tokens -= 1
 		}
 		num_to_pop
